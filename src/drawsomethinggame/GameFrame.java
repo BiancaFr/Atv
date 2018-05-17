@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package drawsomethinggame;
 
 import java.awt.event.KeyEvent;
@@ -11,11 +7,10 @@ import java.util.Random;
 import java.util.Scanner;
 
 /**
- *
- * @author prvilela
+ * @author Prof. Dr. Plinio Vilela - plinio@ft.unicamp.br
+ * Originally developed in 2014
  */
 public class GameFrame extends javax.swing.JFrame implements Observer {
-
     String myName;
     int myPort = 0;
     String serverIP;
