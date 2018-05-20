@@ -7,6 +7,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
@@ -26,12 +28,22 @@ public class Canvas extends JPanel implements Observer, MouseMotionListener, Mou
     boolean clear = false;
     boolean erase = false;
     SocketReceiver sr;
+    ArrayList <Integer> xPoints = new ArrayList<Integer>();
+    ArrayList <Integer> yPoints = new ArrayList<Integer>();
 
     public Canvas() {
         super();
-        //super.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         clear = true;
         repaint();
+    }
+    
+    public int[] convertIntegers(ArrayList<Integer> integers){
+        int[] ret = new int[integers.size()];
+        Iterator<Integer> iterator = integers.iterator();
+        for (int i = 0; i < ret.length; i++){
+            ret[i] = iterator.next().intValue();
+        }
+        return ret;
     }
     
     public void connect(String myName, int myPort, String serverIP, int serverPort) {
@@ -71,12 +83,18 @@ public class Canvas extends JPanel implements Observer, MouseMotionListener, Mou
             draw = (erase?false:true);
             mX = Integer.parseInt(in.next());
             mY = Integer.parseInt(in.next());
+            if(draw){
+                xPoints.add(mX);
+                yPoints.add(mY);
+            }
             repaint();
         } else {
             draw = false;
             if(tag.equals("clear")){
                 in.nextLine();
                 clear = true;
+                xPoints = new ArrayList<Integer>();
+                yPoints = new ArrayList<Integer>();
                 repaint();
             }else{
                 if(tag.equals("toogleErase")){
@@ -91,12 +109,19 @@ public class Canvas extends JPanel implements Observer, MouseMotionListener, Mou
     @Override
     public void paintComponent(Graphics g) {
         if(clear){
+            g.setColor(this.getBackground());
             super.paintComponent(g);
             clear = false;
         }
         if (draw) {
-            g.fillOval(mX-2, mY-2, 5, 5);
+            //g.fillOval(mX-2, mY-2, 5, 5);
+            int[] xVet = convertIntegers(xPoints);
+            int[] yVet = convertIntegers(yPoints);
+            for(int i=0; i<xVet.length; i++){
+                g.fillOval(xVet[i]-2, yVet[i]-2, 5, 5);
+            }
         }else{
+            // Com essa nova versao armazenando os pontos para desenhar o erase nao vai mais funcionar adequadamente.
             if(erase){
                 g.setColor(this.getBackground());
                 g.fillOval(mX-10, mY-10, 20, 20);
