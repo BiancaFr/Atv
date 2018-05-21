@@ -21,7 +21,8 @@ public class SocketSender {
 
     private boolean connect(String ip, int port) {
         try {
-            socket = new Socket(ip, port);                        
+            socket = new Socket(ip, port);   
+            output = new PrintStream(socket.getOutputStream());
             return true;
         } catch (UnknownHostException ex) {
             Logger.getLogger(SocketSender.class.getName()).log(Level.SEVERE, null, ex);
@@ -33,14 +34,7 @@ public class SocketSender {
     }
 
     public boolean sendMessage(String tag, String value) throws IOException {
-        output = new PrintStream(socket.getOutputStream());
         output.print(tag+ "\n" + value +"\n");
-        return true;
-    }
-
-    public boolean disconnect() throws IOException {        
-        socket.close();
-        output.close();
         return true;
     }
 }

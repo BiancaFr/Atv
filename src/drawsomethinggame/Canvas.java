@@ -8,7 +8,6 @@ import java.awt.event.MouseMotionListener;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -19,36 +18,26 @@ import javax.swing.JPanel;
 
 /**
  * @author Prof. Dr. Plinio Vilela - plinio@ft.unicamp.br
- * 
+ *
  */
 public class Canvas extends JPanel implements Observer, MouseMotionListener, MouseListener {
+
     private SocketSender ss;
     private String myIPAddress;
     private String serverIP;
     private int mX = 0;
     private int mY = 0;
     private boolean draw = false;
-    private boolean clear = false;
+    private boolean clear = true;
     private boolean erase = false;
     private SocketReceiver sr;
-    List <Integer> xPoints = new ArrayList<Integer>();
-    List <Integer> yPoints = new ArrayList<Integer>();
+    private List<Integer> xPoints = new ArrayList<Integer>();
+    private List<Integer> yPoints = new ArrayList<Integer>();
 
     public Canvas() {
-        super();
-        clear = true;
         repaint();
     }
-    
-    public int[] convertIntegers(List<Integer> integers){
-        int[] ret = new int[integers.size()];
-        Iterator<Integer> iterator = integers.iterator();
-        for (int i = 0; i < ret.length; i++){
-            ret[i] = iterator.next().intValue();
-        }
-        return ret;
-    }
-    
+
     public void connect(String myName, int myPort, String serverIP, int serverPort) {
         this.serverIP = serverIP;
         sr = new SocketReceiver(myPort);
@@ -58,14 +47,14 @@ public class Canvas extends JPanel implements Observer, MouseMotionListener, Mou
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        ss = new SocketSender(serverIP,serverPort);
+        ss = new SocketSender(serverIP, serverPort);
         try {
             ss.sendMessage("register", myName + " " + myIPAddress + " " + myPort);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Server: " + serverIP + " not available");
         }
         addMouseListener(this);
-        addMouseMotionListener(this);        
+        addMouseMotionListener(this);
     }
 
     public void sendMessage(String tag, String value) {
@@ -85,21 +74,21 @@ public class Canvas extends JPanel implements Observer, MouseMotionListener, Mou
             draw = !erase;
             mX = Integer.parseInt(in.next());
             mY = Integer.parseInt(in.next());
-            if(draw){
+            if (draw) {
                 xPoints.add(mX);
                 yPoints.add(mY);
             }
             repaint();
         } else {
             draw = false;
-            if(tag.equals("clear")){
+            if (tag.equals("clear")) {
                 in.nextLine();
                 clear = true;
                 xPoints = new ArrayList<Integer>();
                 yPoints = new ArrayList<Integer>();
                 repaint();
-            }else{
-                if(tag.equals("toogleErase")){
+            } else {
+                if (tag.equals("toogleErase")) {
                     in.nextLine();
                     erase = !erase;
                 }
@@ -110,34 +99,30 @@ public class Canvas extends JPanel implements Observer, MouseMotionListener, Mou
 
     @Override
     public void paintComponent(Graphics g) {
-        if(clear){
+        if (clear) {
             g.setColor(this.getBackground());
             super.paintComponent(g);
             clear = false;
         }
         if (draw) {
             //g.fillOval(mX-2, mY-2, 5, 5);
-            int[] xVet = convertIntegers(xPoints);
-            int[] yVet = convertIntegers(yPoints);
-            for(int i=0; i<xVet.length; i++){
-                g.fillOval(xVet[i]-2, yVet[i]-2, 5, 5);
+            for (int i = 0; i < xPoints.size(); i++) {
+                g.fillOval(xPoints.get(i) - 2, yPoints.get(i) - 2, 5, 5);
             }
-        }else{
+        } else if (erase) {
             // Com essa nova versao armazenando os pontos para desenhar o erase nao vai mais funcionar adequadamente.
-            if(erase){
-                g.setColor(this.getBackground());
-                g.fillOval(mX-10, mY-10, 20, 20);
-                g.setColor(Color.BLACK);
-            }
+            g.setColor(this.getBackground());
+            g.fillOval(mX - 10, mY - 10, 20, 20);
+            g.setColor(Color.BLACK);
         }
     }
 
-    public void clear(){
-        sendMessage("clear","null");
+    public void clear() {
+        sendMessage("clear", "null");
     }
 
-    public void toogleErase(){
-        sendMessage("toogleErase","null");
+    public void toogleErase() {
+        sendMessage("toogleErase", "null");
     }
 
     public void addObserver(Observer o) {

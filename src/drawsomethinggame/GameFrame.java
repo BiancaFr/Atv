@@ -9,6 +9,7 @@ import java.util.Scanner;
 /**
  * @author Prof. Dr. Plinio Vilela - plinio@ft.unicamp.br
  * Originally developed in 2014
+ * Attention: the Observer / Observable pattern has been deprecated on Java 9
  */
 public class GameFrame extends javax.swing.JFrame implements Observer {
     private String myName;
