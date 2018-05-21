@@ -9,6 +9,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
@@ -16,20 +17,22 @@ import javax.swing.JOptionPane;
 
 import javax.swing.JPanel;
 
+/**
+ * @author Prof. Dr. Plinio Vilela - plinio@ft.unicamp.br
+ * 
+ */
 public class Canvas extends JPanel implements Observer, MouseMotionListener, MouseListener {
-
-    SocketSender ss;
-    String myIPAddress;
-    String serverIP;
-    int serverPort;
-    int mX = 0;
-    int mY = 0;
-    boolean draw = false;
-    boolean clear = false;
-    boolean erase = false;
-    SocketReceiver sr;
-    ArrayList <Integer> xPoints = new ArrayList<Integer>();
-    ArrayList <Integer> yPoints = new ArrayList<Integer>();
+    private SocketSender ss;
+    private String myIPAddress;
+    private String serverIP;
+    private int mX = 0;
+    private int mY = 0;
+    private boolean draw = false;
+    private boolean clear = false;
+    private boolean erase = false;
+    private SocketReceiver sr;
+    List <Integer> xPoints = new ArrayList<Integer>();
+    List <Integer> yPoints = new ArrayList<Integer>();
 
     public Canvas() {
         super();
@@ -37,7 +40,7 @@ public class Canvas extends JPanel implements Observer, MouseMotionListener, Mou
         repaint();
     }
     
-    public int[] convertIntegers(ArrayList<Integer> integers){
+    public int[] convertIntegers(List<Integer> integers){
         int[] ret = new int[integers.size()];
         Iterator<Integer> iterator = integers.iterator();
         for (int i = 0; i < ret.length; i++){
@@ -48,7 +51,6 @@ public class Canvas extends JPanel implements Observer, MouseMotionListener, Mou
     
     public void connect(String myName, int myPort, String serverIP, int serverPort) {
         this.serverIP = serverIP;
-        this.serverPort = serverPort;
         sr = new SocketReceiver(myPort);
         sr.addObserver(this);
         try {
@@ -80,7 +82,7 @@ public class Canvas extends JPanel implements Observer, MouseMotionListener, Mou
         String tag = in.nextLine();
 
         if (tag.equals("p")) {
-            draw = (erase?false:true);
+            draw = !erase;
             mX = Integer.parseInt(in.next());
             mY = Integer.parseInt(in.next());
             if(draw){
@@ -99,7 +101,7 @@ public class Canvas extends JPanel implements Observer, MouseMotionListener, Mou
             }else{
                 if(tag.equals("toogleErase")){
                     in.nextLine();
-                    erase = (erase?false:true);
+                    erase = !erase;
                 }
             }
         }
