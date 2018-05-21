@@ -11,10 +11,10 @@ import java.util.Scanner;
  * Originally developed in 2014
  */
 public class GameFrame extends javax.swing.JFrame implements Observer {
-    String myName;
-    int myPort = 0;
-    String serverIP;
-    int serverPort = 3333;
+    private String myName;
+    private int myPort = 0;
+    private String serverIP;
+    private int serverPort = 3333;
 
     /**
      * Creates new form GameFrame

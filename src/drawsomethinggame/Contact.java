@@ -2,7 +2,10 @@ package drawsomethinggame;
 
 import java.io.IOException;
 
-
+/**
+ * @author Prof. Dr. Plinio Vilela - plinio@ft.unicamp.br
+ * 
+ */
 public class Contact {
 	public String name;
 	public String ip;

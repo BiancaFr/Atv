@@ -8,7 +8,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Prof. Dr. Plinio Vilela - vilela@ydoo.com.br
+ * @author Prof. Dr. Plinio Vilela - plinio@ft.unicamp.br
+ * 
  */
 public class SocketSender {    
     private Socket socket;

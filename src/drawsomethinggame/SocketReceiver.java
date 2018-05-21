@@ -13,14 +13,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Prof. Dr. Plinio Vilela -- vilela@ydoo.com.br
+ * @author Prof. Dr. Plinio Vilela - plinio@ft.unicamp.br
+ * 
  */
 public class SocketReceiver extends Observable implements Runnable {
     private ServerSocket myServerSocket;
     private Socket mySocket;
     private String myIp;
     private int myPort;
-    boolean serverListening = false;
+    private boolean serverListening = false;
 
     public SocketReceiver(int myPort) {
         try {
